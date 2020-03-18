@@ -1,0 +1,43 @@
+cmake_minimum_required(VERSION 3.10)
+
+project(ze_engine)
+set(root_dir ${${CMAKE_PROJECT_NAME}_SOURCE_DIR})
+
+enable_language(CXX)
+add_compile_options("--std=c++17")
+add_compile_options("-D_XOPEN_SOURCE=700")
+add_compile_options("-g")
+add_compile_options("-Wall")
+add_compile_options("-Werror")
+add_compile_options("-Wno-attributes")
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+	set(cpp stdc++fs stdc++ pthread)
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+	set(cpp c++fs c++ pthread)
+endif()
+
+message(STATUS ${CMAKE_SYSTEM_NAME})
+if (CMAKE_SYSTEM_NAME MATCHES "MSYS")
+	message(STATUS "msys detected")
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -mconsole")
+	include_directories("/mingw64/include/")
+	link_directories("/mingw64/lib/")
+elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+	include_directories("/usr/local/include/")
+	link_directories("/usr/local/lib/")
+endif()
+
+set(LIBRARY_OUTPUT_PATH                        ${PROJECT_BINARY_DIR}/bin)
+set(EXECUTABLE_OUTPUT_PATH                     ${PROJECT_BINARY_DIR}/bin)
+
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+	set(CMAKE_INSTALL_PREFIX "~/.local/" CACHE PATH "..." FORCE)
+endif()
+set(CMAKE_INSTALL_RPATH                        "$ORIGIN/../lib/")
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH          FALSE)
+set(CMAKE_INSTALL_REMOVE_ENVIRONMENT_RPATH     TRUE)
+
+enable_testing()
+add_subdirectory(zenet)
+add_subdirectory(test)

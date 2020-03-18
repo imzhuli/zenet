@@ -1,0 +1,15 @@
+#!/bin/bash
+set -e
+
+SPV_DIR=./asset/spv/
+
+echo "Starting to compile all asset/glsl/* shader files to spv fomrat"
+echo "Entering directory: ${SPV_DIR} ..."
+mkdir -p ${SPV_DIR}
+cd ${SPV_DIR}
+rm -rf *.spv
+../scripts/compile ../glsl/*
+echo "Glslc exited, listing files:"
+ls -l *.spv
+echo "Leaving directory: ${SPV_DIR} ..."
+echo "Complation job finished!"
