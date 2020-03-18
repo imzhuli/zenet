@@ -1,0 +1,47 @@
+# Prerequisites
+*.d
+
+# Memory dump files
+*.stackdump
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# default local build directory
+build
+build_d
+build_r
+_build
+_build_d
+_build_r
+.vscode
+.DS_Store
+*.swp
+*.log
