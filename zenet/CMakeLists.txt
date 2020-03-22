@@ -16,10 +16,8 @@ else()
 	set(ze zecore)
 endif()
 
-set(vk vulkan)
-set(sdl SDL2)
 set(libevent event_core event_extra event_pthreads)
-set(shared_lib_dependency_private ${vk} ${sdl} ${libevent} ${libevent} ${ze} ${cpp})
+set(shared_lib_dependency_private ${libevent} ${libevent} ${ze} ${cpp})
 set(shared_lib_dependency_public)
 
 #static libs:

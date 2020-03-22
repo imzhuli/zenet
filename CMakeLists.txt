@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(ze_engine)
+project(ze_net)
 set(root_dir ${${CMAKE_PROJECT_NAME}_SOURCE_DIR})
 
 enable_language(CXX)
