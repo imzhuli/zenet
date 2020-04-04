@@ -36,16 +36,6 @@ namespace ze
 
 	ZENetworkManager::EnvGuard::EnvGuard()
 	{
-		ZENetworkManager::initEnv();
-	}
-
-	ZENetworkManager::EnvGuard::~EnvGuard()
-	{
-		ZENetworkManager::cleanEnv();
-	}
-
-	void ZENetworkManager::initEnv()
-	{
 		std::call_once(sxLibventInitFlag, [] {
 
 #ifdef NDEBUG
@@ -58,7 +48,7 @@ namespace ze
 #elif defined(EVTHREAD_USE_PTHREADS_IMPLEMENTED)
 			expect(!evthread_use_pthreads());
 #endif
-		});
+			});
 
 		std::lock_guard envGuard{ sxEnvMutex };
 		if (sxEnvReady) {
@@ -71,7 +61,7 @@ namespace ze
 		sxEnvReady = true;
 	}
 
-	void ZENetworkManager::cleanEnv()
+	ZENetworkManager::EnvGuard::~EnvGuard()
 	{
 		std::lock_guard envGuard{ sxEnvMutex };
 		if (!sxEnvReady) {

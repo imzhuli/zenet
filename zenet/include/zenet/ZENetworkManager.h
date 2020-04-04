@@ -14,8 +14,6 @@ namespace ze
 	: public IResource
 	{
 	public:
-		static void initEnv();
-		static void cleanEnv();
 		struct EnvGuard {
 			EnvGuard();
 			~EnvGuard();

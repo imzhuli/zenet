@@ -57,6 +57,4 @@ int main(int, char **)
 		nm.loopOnce();
 	}
 	std::this_thread::sleep_for(1s);
-
-	ZENetworkManager::cleanEnv();
 }
