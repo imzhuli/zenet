@@ -21,8 +21,7 @@ namespace ze
 
 	static const auto scPredefinedDnsServer = carray {
 		type<const char *>,
-		"223.5.5.5",
-		"8.8.8.8",
+		"223.5.5.5"
 	};
 
 	static evutil_addrinfo scHints = {
