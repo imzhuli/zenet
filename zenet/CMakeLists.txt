@@ -1,6 +1,8 @@
 project(libzenet)
 set(libname zenet)
 
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
 include_directories(
 	./include/
 	../../zecore/zecore/include/
@@ -14,9 +16,9 @@ link_directories(
 aux_source_directory(./src/ SRC)
 
 if (CMAKE_BUILD_TYPE MATCHES "Release")
-	set(ze zecore_r)
+	set(ze_dynamic zecore_shared_r)
 else()
-	set(ze zecore)
+	set(ze_dynamic zecore_shared)
 endif()
 
 if (WIN32)
@@ -43,7 +45,7 @@ if (CMAKE_BUILD_TYPE MATCHES "Release")
 	set_target_properties(${libname}_dynamic PROPERTIES OUTPUT_NAME ${libname}_shared_r)
 else()
 	set_target_properties(${libname}_dynamic PROPERTIES OUTPUT_NAME ${libname}_shared)
-endif()	
+endif()
 
 install(
 	DIRECTORY ${PROJECT_SOURCE_DIR}/./include/zenet

@@ -11,9 +11,9 @@ link_directories(
 )
 
 if (CMAKE_BUILD_TYPE MATCHES "Release")
-	set(ze zecore_r)
+	set(ze_dynamic zecore_shared_r)
 else()
-	set(ze zecore)
+	set(ze_dynamic zecore_shared)
 endif()
 
 if (WIN32)
@@ -21,6 +21,8 @@ if (WIN32)
 else()
 	set(libevent event_core event_extra event_pthreads)
 endif()
+
+set(test_dependency zenet_dynamic ${ze_dynamic} ${cpp})
 
 aux_source_directory(./libevent TEST_LIBEVENT_SRC)
 add_executable(test_libevent ${TEST_LIBEVENT_SRC})
