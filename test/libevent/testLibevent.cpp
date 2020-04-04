@@ -44,7 +44,7 @@ static const char* host = "www.baidu.com";
 
 int main(int, char **)
 {
-	ZENetworkManager::setupEnv();
+	ZENetworkManager::EnvGuard nmEnvGuard;
 
 	ZENetworkManager nm;
 	ZEDnsResultPrinter dnsPrinter;
@@ -57,4 +57,6 @@ int main(int, char **)
 		nm.loopOnce();
 	}
 	std::this_thread::sleep_for(1s);
+
+	ZENetworkManager::cleanEnv();
 }

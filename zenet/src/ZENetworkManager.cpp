@@ -16,7 +16,8 @@ namespace ze
 	static_assert(sizeof(sockaddr_in) <= sizeof(sockaddr_in6));
 
 	static bool sxEnvReady = false;
-	static std::once_flag sgNetworkInitFlag;
+	static std::mutex sxEnvMutex;
+	static std::once_flag sxLibventInitFlag;
 
 	static const auto scPredefinedDnsServer = carray {
 		type<const char *>,
@@ -33,18 +34,23 @@ namespace ze
 	ZE_UNUSED static void EventLogNone(int severity, const char* msg)
 	{}
 
-	void ZENetworkManager::setupEnv()
+	ZENetworkManager::EnvGuard::EnvGuard()
 	{
-		std::call_once(sgNetworkInitFlag, [] {
+		ZENetworkManager::initEnv();
+	}
+
+	ZENetworkManager::EnvGuard::~EnvGuard()
+	{
+		ZENetworkManager::cleanEnv();
+	}
+
+	void ZENetworkManager::initEnv()
+	{
+		std::call_once(sxLibventInitFlag, [] {
 
 #ifdef NDEBUG
 			event_enable_debug_logging(EVENT_DBG_NONE);
 			event_set_log_callback(EventLogNone);
-#endif
-
-#ifdef WIN32
-		WSADATA wsa_data;
-		WSAStartup(MAKEWORD(2, 2), &wsa_data);
 #endif
 
 #if defined(EVTHREAD_USE_WINDOWS_THREADS_IMPLEMENTED)
@@ -52,8 +58,29 @@ namespace ze
 #elif defined(EVTHREAD_USE_PTHREADS_IMPLEMENTED)
 			expect(!evthread_use_pthreads());
 #endif
-			sxEnvReady = true;
 		});
+
+		std::lock_guard envGuard{ sxEnvMutex };
+		if (sxEnvReady) {
+			return;
+		}
+#ifdef WIN32
+		WSADATA wsa_data = {};
+		WSAStartup(MAKEWORD(2, 2), &wsa_data);
+#endif
+		sxEnvReady = true;
+	}
+
+	void ZENetworkManager::cleanEnv()
+	{
+		std::lock_guard envGuard{ sxEnvMutex };
+		if (!sxEnvReady) {
+			return;
+		}
+#ifdef WIN32
+		WSACleanup();
+#endif
+		sxEnvReady = false;
 	}
 
 	bool ZENetworkManager::init(const void * pParam)

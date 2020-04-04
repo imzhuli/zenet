@@ -14,7 +14,14 @@ namespace ze
 	: public IResource
 	{
 	public:
-		static void setupEnv();
+		static void initEnv();
+		static void cleanEnv();
+		struct EnvGuard {
+			EnvGuard();
+			~EnvGuard();
+		private:
+			EnvGuard(EnvGuard&&) = delete; // no copy && no move
+		};
 
 		bool init(const void * pParam) override;
 		void clean() override;
