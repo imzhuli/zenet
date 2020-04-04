@@ -19,9 +19,23 @@ namespace ze
 		.ai_protocol = IPPROTO_TCP,
 	};
 
+	ZE_UNUSED static void EventLogNone(int severity, const char* msg)
+	{}
+
 	void ZENetworkManager::setupEnv()
 	{
 		std::call_once(sgNetworkInitFlag, [] {
+
+#ifdef NDEBUG
+			event_enable_debug_logging(EVENT_DBG_NONE);
+			event_set_log_callback(EventLogNone);
+#endif
+
+#ifdef WIN32
+		WSADATA wsa_data;
+		WSAStartup(MAKEWORD(2, 2), &wsa_data);
+#endif
+
 #if defined(EVTHREAD_USE_WINDOWS_THREADS_IMPLEMENTED)
 			expect(!evthread_use_windows_threads());
 #elif defined(EVTHREAD_USE_PTHREADS_IMPLEMENTED)

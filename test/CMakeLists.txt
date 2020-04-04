@@ -22,12 +22,10 @@ else()
 	set(libevent event_core event_extra event_pthreads)
 endif()
 
-set(test_dependency zenet_dynamic ${ze_dynamic} ${cpp})
+set(test_dependency zenet_dynamic ${libevent} ${ze_dynamic} ${cpp})
 
 aux_source_directory(./libevent TEST_LIBEVENT_SRC)
 add_executable(test_libevent ${TEST_LIBEVENT_SRC})
-
-target_link_libraries(test_libevent ${libevent} )
 target_link_libraries(test_libevent ${test_dependency})
 
 add_test(test_libevent ${EXECUTABLE_OUTPUT_PATH}/test_libevent)
