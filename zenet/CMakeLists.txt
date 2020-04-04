@@ -1,14 +1,17 @@
 project(libzenet)
+set(libname zenet)
 
 include_directories(
 	./include/
 	../../zecore/zecore/include/
+	${libevent_include_dir}
 	)
 link_directories(
-	~/.local/lib/
+	${CMAKE_INSTALL_PREFIX}/lib/
+	${libevent_lib_dir}
 	)
 
-aux_source_directory(./src/ ZENET_SRC)
+aux_source_directory(./src/ SRC)
 
 if (CMAKE_BUILD_TYPE MATCHES "Release")
 	set(ze zecore_r)
@@ -16,27 +19,31 @@ else()
 	set(ze zecore)
 endif()
 
-set(libevent event_core event_extra event_pthreads)
-set(shared_lib_dependency_private ${libevent} ${libevent} ${ze} ${cpp})
+if (WIN32)
+	set(libevent libevent_core libevent_extras ws2_32)
+else()
+	set(libevent event_core event_extra event_pthreads)
+endif()
+
+set(shared_lib_dependency_private ${libevent} ${ze} ${cpp})
 set(shared_lib_dependency_public)
 
 #static libs:
-add_library(zenet STATIC ${ZENET_SRC})
+add_library(${libname} STATIC ${SRC})
 if (CMAKE_BUILD_TYPE MATCHES "Release")
-	set_target_properties(zenet PROPERTIES OUTPUT_NAME zenet_r)
+	set_target_properties(${libname} PROPERTIES OUTPUT_NAME ${libname}_r)
 else()
-	set_target_properties(zenet PROPERTIES OUTPUT_NAME zenet)
+	set_target_properties(${libname} PROPERTIES OUTPUT_NAME ${libname})
 endif()
 
-add_library(zenet_dynamic SHARED ${ZENET_SRC})
-target_link_libraries(zenet_dynamic PRIVATE ${shared_lib_dependency_private})
-target_link_libraries(zenet_dynamic PUBLIC  ${shared_lib_dependency_public})
-set_target_properties(zenet_dynamic PROPERTIES VERSION 1.0)
+add_library(${libname}_dynamic SHARED ${SRC})
+target_link_libraries(${libname}_dynamic PRIVATE ${shared_lib_dependency_private})
+set_target_properties(${libname}_dynamic PROPERTIES VERSION 1.0)
 if (CMAKE_BUILD_TYPE MATCHES "Release")
-	set_target_properties(zenet_dynamic PROPERTIES OUTPUT_NAME zenet_r)
+	set_target_properties(${libname}_dynamic PROPERTIES OUTPUT_NAME ${libname}_shared_r)
 else()
-	set_target_properties(zenet_dynamic PROPERTIES OUTPUT_NAME zenet)
-endif()
+	set_target_properties(${libname}_dynamic PROPERTIES OUTPUT_NAME ${libname}_shared)
+endif()	
 
 install(
 	DIRECTORY ${PROJECT_SOURCE_DIR}/./include/zenet

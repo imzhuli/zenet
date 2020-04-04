@@ -11,11 +11,11 @@ namespace ze
 		Result result;
 		do {
 			result = tryReadPackage(pConnection);
-			if (result != Result::S_AGAIN) {
+			if (result != Result::AGAIN) {
 				break;
 			}
 		} while(true);
-		return result >= Result::S_OK;
+		return result >= Result::OK;
 	}
 
 	Result ZERpcProxy::tryReadPackage(ZEConnection * pConnection)
@@ -32,7 +32,7 @@ namespace ze
 			rHeadReceived += headerExpected;
 			headerExpected = ZERpc::HEADER_SIZE - rHeadReceived;
 			if (headerExpected) { // header not done
-				return Result::S_OK;
+				return Result::OK;
 			}
 		}
 
@@ -40,7 +40,7 @@ namespace ze
 		if (!rBodyExpected) {
 			if (!rZERpcRequest.readHeader(rRecvBuffer)
 			|| !rRecvBuffer.resize(rZERpcRequest.totalSize())) {
-				return Result::E_GENERIC;
+				return Result::GENERIC_ERROR;
 			}
 			rBodyExpected = rZERpcRequest.bodySize();
 		}
@@ -51,13 +51,13 @@ namespace ze
 			rBodyReceived += bodyExpected;
 			bodyExpected = rBodyExpected - rBodyReceived;
 			if (bodyExpected) {
-				return Result::S_OK;
+				return Result::OK;
 			}
 		}
 
 		// body received:
 		if (!onRequest(pConnection, rZERpcRequest, rBodyReceived ? pBody : nullptr)) {
-			return Result::E_GENERIC;
+			return Result::GENERIC_ERROR;
 		}
 
 		// cleanup:
@@ -65,7 +65,7 @@ namespace ze
 		rHeadReceived = 0;
 		rBodyExpected = 0;
 		rBodyReceived = 0;
-		return Result::S_AGAIN;
+		return Result::AGAIN;
 	}
 
 	bool ZERpcProxy::postRequest(ZEConnection * pConnection, const ZERpc & rpc, const ubyte * dataBody)

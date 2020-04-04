@@ -13,11 +13,13 @@ namespace ze
 		if (-1 == sock) {
 			return -1;
 		}
-		uint32_t on = 1;
 		evutil_make_socket_nonblocking(sock);
 		evutil_make_listen_socket_reuseable(sock);
 		evutil_make_listen_socket_reuseable_port(sock);
+		/*
+		uint32_t on = 1;
 		setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, &on, sizeof(on));
+		*/
 		return sock;
 	}
 
@@ -142,7 +144,7 @@ namespace ze
 		static_assert(OFFSET_OF_PDATA_IN_DATAVIEW() == offsetof(evbuffer_iovec, iov_base));
 		static_assert(OFFSET_OF_XSIZE_IN_DATAVIEW() == offsetof(evbuffer_iovec, iov_len));
 
-		return evbuffer_add_iovec(bufferevent_get_output(_pBufferEvent), reinterpret_cast<evbuffer_iovec *>(writeList.begin()), writeList.size());
+		return evbuffer_add_iovec(bufferevent_get_output(_pBufferEvent), reinterpret_cast<evbuffer_iovec *>(writeList.begin()), (int)writeList.size());
 	}
 
 	bool ZEConnection::read(void * buffer, tag::inout<size_t> length)

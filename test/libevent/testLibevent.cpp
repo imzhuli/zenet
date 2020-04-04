@@ -30,7 +30,6 @@ int main(int, char **)
 {
 	const char * host = "www.qq.com";
 
-	evthread_use_pthreads();
 	event_base * event_base = nullptr;
 	evdns_base * evdns_base = nullptr;
 

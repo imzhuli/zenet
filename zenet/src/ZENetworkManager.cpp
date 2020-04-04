@@ -22,7 +22,11 @@ namespace ze
 	void ZENetworkManager::setupEnv()
 	{
 		std::call_once(sgNetworkInitFlag, [] {
+#if defined(EVTHREAD_USE_WINDOWS_THREADS_IMPLEMENTED)
+			expect(!evthread_use_windows_threads());
+#elif defined(EVTHREAD_USE_PTHREADS_IMPLEMENTED)
 			expect(!evthread_use_pthreads());
+#endif
 			sxEnvReady = true;
 		});
 	}
