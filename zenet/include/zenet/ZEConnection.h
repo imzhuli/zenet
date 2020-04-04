@@ -48,11 +48,6 @@ namespace ze
 		};
 		tag::config<evutil_socket_t> cAcceptedSocket = -1; /* EVUTIL_INVALID_SOCKET is prefered, but it is not defined on all platforms */
 
-		static_assert(std::has_unique_object_representations_v<sockaddr_in>);
-		static_assert(std::has_unique_object_representations_v<sockaddr_in6>);
-		static_assert(std::is_same_v<decltype(sockaddr_in::sin_family), decltype(sockaddr_in6::sin6_family)>);
-		static_assert(offsetof(sockaddr_in, sin_family) == offsetof(sockaddr_in6, sin6_family));
-		static_assert(sizeof(sockaddr_in) <= sizeof(sockaddr_in6));
 	public:
 		ZE_FORCE_INLINE bool isReady() const { return _xState != UNKNOWN; }
 		ZE_FORCE_INLINE bool isOpen() const { return _xState >= OPEN && _xState < CLOSED; }

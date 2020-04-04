@@ -1,5 +1,6 @@
 #include <ze/convention.h>
 #include <ze/chrono.h>
+#include <ze/ext/string.h>
 #include <zenet/ZENetworkManager.h>
 #include <zenet/ZEDns.h>
 #include <cassert>
@@ -24,7 +25,16 @@ struct ZEDnsResultPrinter
 		}
 		for (size_t i = 0; i < domainInfo->xAddressNumber; ++i)
 		{			
-			cout << "IP: " << inet_ntoa(domainInfo->xAddresses[i].sin_addr) << endl;
+			auto& addr = domainInfo->xAddresses[i];
+			if (addr.addr.sa_family == AF_INET) {
+				auto a4 = reinterpret_cast<const uint8_t *>(&addr.addr4.sin_addr);
+				cout << "IPv4: "
+					<< (int)a4[0] << '.'
+					<< (int)a4[1] << '.'
+					<< (int)a4[2] << '.'
+					<< (int)a4[3]
+					<< endl;
+			}
 		}
 		testSuccessful = true;
 	}

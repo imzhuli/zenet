@@ -9,7 +9,11 @@ namespace ze
 
 	struct ZEDomainInfo
 	{
-		sockaddr_in xAddresses[ZE_MAX_RESOLVE_ADDRESS_NUMBER];
+		union {
+			sockaddr     addr;
+			sockaddr_in  addr4;
+			sockaddr_in6 addr6;
+		} xAddresses[ZE_MAX_RESOLVE_ADDRESS_NUMBER];
 		size_t xAddressNumber = 0;
 	};
 

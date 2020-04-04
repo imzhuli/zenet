@@ -4,6 +4,17 @@
 
 namespace ze
 {
+	// prerequisites:
+	static_assert(std::has_unique_object_representations_v<sockaddr>);
+	static_assert(std::has_unique_object_representations_v<sockaddr_in>);
+	static_assert(std::has_unique_object_representations_v<sockaddr_in6>);
+	static_assert(std::is_same_v<decltype(sockaddr::sa_family), decltype(sockaddr_in::sin_family)>);
+	static_assert(std::is_same_v<decltype(sockaddr_in::sin_family), decltype(sockaddr_in6::sin6_family)>);
+	static_assert(offsetof(sockaddr, sa_family) == offsetof(sockaddr_in, sin_family));
+	static_assert(offsetof(sockaddr, sa_family) == offsetof(sockaddr_in6, sin6_family));
+	static_assert(sizeof(sockaddr) <= sizeof(sockaddr_in));
+	static_assert(sizeof(sockaddr_in) <= sizeof(sockaddr_in6));
+
 	static bool sxEnvReady = false;
 	static std::once_flag sgNetworkInitFlag;
 
@@ -119,7 +130,11 @@ namespace ze
 			size_t count = 0;
 			while(iterator && count < ZE_MAX_RESOLVE_ADDRESS_NUMBER) {
 				if(iterator->ai_family == AF_INET && iterator->ai_addrlen == sizeof(sockaddr_in)) { // only process af_inet address
-					result.xAddresses[count] = reinterpret_cast<sockaddr_in&>(*iterator->ai_addr);
+					result.xAddresses[count].addr4 = reinterpret_cast<sockaddr_in&>(*iterator->ai_addr);
+					++count;
+				}
+				if (iterator->ai_family == AF_INET6 && iterator->ai_addrlen == sizeof(sockaddr_in6)) { // only process af_inet address
+					result.xAddresses[count].addr6 = reinterpret_cast<sockaddr_in6&>(*iterator->ai_addr);
 					++count;
 				}
 				iterator = iterator->ai_next;
