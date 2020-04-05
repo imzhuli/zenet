@@ -1,14 +1,13 @@
 project(test_zenet)
 
 include_directories(
+	./include/
 	../zenet/include/
-	../../zecore/zecore/include/
-	${libevent_include_dir}
+	${CMAKE_INSTALL_PREFIX}/include/
 	)
 link_directories(
 	${CMAKE_INSTALL_PREFIX}/lib/
-	${libevent_lib_dir}
-)
+	)
 
 if (CMAKE_BUILD_TYPE MATCHES "Release")
 	set(ze_dynamic zecore_shared_r)

@@ -5,12 +5,10 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 include_directories(
 	./include/
-	../../zecore/zecore/include/
-	${libevent_include_dir}
+	${CMAKE_INSTALL_PREFIX}/include/
 	)
 link_directories(
 	${CMAKE_INSTALL_PREFIX}/lib/
-	${libevent_lib_dir}
 	)
 
 aux_source_directory(./src/ SRC)
