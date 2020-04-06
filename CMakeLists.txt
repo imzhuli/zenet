@@ -4,7 +4,7 @@ project(ze_net)
 set(root_dir ${${CMAKE_PROJECT_NAME}_SOURCE_DIR})
 
 enable_language(CXX)
-set(CMAKE_CXX_STANDARD 17)
+#set(CMAKE_CXX_STANDARD 17)
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 	add_compile_options("-std:c++latest")
