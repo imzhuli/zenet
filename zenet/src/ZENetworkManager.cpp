@@ -88,11 +88,10 @@ namespace ze
 		if (!_pEventBase) {
 			return false;
 		}
-#ifndef EVDNS_BASE_NAMESERVERS_NO_DEFAULT
 		_pDnsBase = evdns_base_new(_pEventBase, EVDNS_BASE_DISABLE_WHEN_INACTIVE);
-#else
+		/* if resolv.conf is required 
 		_pDnsBase = evdns_base_new(_pEventBase, EVDNS_BASE_INITIALIZE_NAMESERVERS | EVDNS_BASE_DISABLE_WHEN_INACTIVE | EVDNS_BASE_NAMESERVERS_NO_DEFAULT);
-#endif
+		*/
 		if (!_pDnsBase) {
 			event_base_free(steal(_pEventBase));
 			return false;
