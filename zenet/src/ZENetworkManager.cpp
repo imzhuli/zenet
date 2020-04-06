@@ -88,7 +88,11 @@ namespace ze
 		if (!_pEventBase) {
 			return false;
 		}
+#ifdef WIN32
+		_pDnsBase = evdns_base_new(_pEventBase, EVDNS_BASE_DISABLE_WHEN_INACTIVE);
+#else
 		_pDnsBase = evdns_base_new(_pEventBase, EVDNS_BASE_INITIALIZE_NAMESERVERS | EVDNS_BASE_DISABLE_WHEN_INACTIVE | EVDNS_BASE_NAMESERVERS_NO_DEFAULT);
+#endif
 		if (!_pDnsBase) {
 			event_base_free(steal(_pEventBase));
 			return false;
