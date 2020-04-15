@@ -26,7 +26,7 @@ namespace ze
 	bool ZEConnectionEventListener::onConnectionInputReady(ZEConnection * pConnection)
 	{
 		ubyte data[1024];
-		while(pConnection->read(data, noout(sizeof data)))
+		while(pConnection->read(data, xref(sizeof data)))
 		{}
 		return true;
 	}
