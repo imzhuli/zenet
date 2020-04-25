@@ -13,11 +13,7 @@ link_directories(
 
 aux_source_directory(./src/ SRC)
 
-if (CMAKE_BUILD_TYPE MATCHES "Release")
-	set(ze_dynamic zecore_shared_r)
-else()
-	set(ze_dynamic zecore_shared)
-endif()
+set(ze_dynamic zecore_shared)
 
 if (WIN32)
 	set(libevent libevent_core libevent_extras ws2_32)
@@ -28,22 +24,14 @@ endif()
 set(shared_lib_dependency_private ${libevent} ${ze} ${cpp})
 set(shared_lib_dependency_public)
 
-#static libs:
+#static lib:
 add_library(${libname} STATIC ${SRC})
-if (CMAKE_BUILD_TYPE MATCHES "Release")
-	set_target_properties(${libname} PROPERTIES OUTPUT_NAME ${libname}_r)
-else()
-	set_target_properties(${libname} PROPERTIES OUTPUT_NAME ${libname})
-endif()
 
+#dynamic lib
 add_library(${libname}_dynamic SHARED ${SRC})
 target_link_libraries(${libname}_dynamic PRIVATE ${shared_lib_dependency_private})
 set_target_properties(${libname}_dynamic PROPERTIES VERSION 1.0)
-if (CMAKE_BUILD_TYPE MATCHES "Release")
-	set_target_properties(${libname}_dynamic PROPERTIES OUTPUT_NAME ${libname}_shared_r)
-else()
-	set_target_properties(${libname}_dynamic PROPERTIES OUTPUT_NAME ${libname}_shared)
-endif()
+set_target_properties(${libname}_dynamic PROPERTIES OUTPUT_NAME ${libname}_shared)
 
 install(
 	DIRECTORY ${PROJECT_SOURCE_DIR}/./include/zenet
