@@ -21,7 +21,7 @@ else()
 	set(libevent event_core event_extra event_pthreads)
 endif()
 
-set(shared_lib_dependency_private ${libevent} ${ze} ${cpp})
+set(shared_lib_dependency_private ${libevent} ${ze_dynamic} ${cpp})
 set(shared_lib_dependency_public)
 
 #static lib:

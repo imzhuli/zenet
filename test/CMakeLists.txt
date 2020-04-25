@@ -9,12 +9,7 @@ link_directories(
 	${CMAKE_INSTALL_PREFIX}/lib/
 	)
 
-if (CMAKE_BUILD_TYPE MATCHES "Release")
-	set(ze_dynamic zecore_shared_r)
-else()
-	set(ze_dynamic zecore_shared)
-endif()
-
+set(ze_dynamic zecore_shared)
 if (WIN32)
 	set(libevent libevent_core libevent_extras ws2_32)
 else()
