@@ -89,7 +89,7 @@ namespace ze
 			return false;
 		}
 		_pDnsBase = evdns_base_new(_pEventBase, EVDNS_BASE_DISABLE_WHEN_INACTIVE);
-		/* if resolv.conf is required 
+		/* if resolv.conf is required
 		_pDnsBase = evdns_base_new(_pEventBase, EVDNS_BASE_INITIALIZE_NAMESERVERS | EVDNS_BASE_DISABLE_WHEN_INACTIVE | EVDNS_BASE_NAMESERVERS_NO_DEFAULT);
 		*/
 		if (!_pDnsBase) {
@@ -163,7 +163,7 @@ namespace ze
 			evutil_freeaddrinfo(addr);
 		}
 		auto pool = pRequest->hRecyclePool;
-		pool->dealloc(pRequest);
+		pool->destroy(pRequest);
 	}
 
 	void ZENetworkManager::addNameServer(const char * ipstr)
@@ -179,7 +179,7 @@ namespace ze
 			listener->onDnsResult(hostname, nullptr, "Too long hostname");
 			return nullptr;
 		}
-		AsyncContext * pContext = _xDnsRequestPool.alloc();
+		AsyncContext * pContext = _xDnsRequestPool.create();
 		if (!pContext) {
 			listener->onDnsResult(hostname, nullptr, "Max request reached");
 			return nullptr;
