@@ -35,7 +35,7 @@ namespace ze
 		tag::option<const char *>                 opRemoteHost = nullptr;
 		tag::option<uint_fast16_t>                oxRemotePort = 0;
 		tag::handle<ZEConnectionEventListener *>  hConnectionEventListener = nullptr;
-		tag::handle<Variable>                     hConnectionEventListenerContext {};
+		tag::handle<Variant>                     hConnectionEventListenerContext {};
 		tag::handle<ZENetworkManager*>            hNetworkManager = nullptr;
 
 		union {

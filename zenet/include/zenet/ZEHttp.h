@@ -46,7 +46,7 @@ namespace ze
 
 		tag::handle<ZENetworkManager*>           hNetworkManager          = nullptr;
 		tag::handle<ZEHttpClientListener *>      hHttpListener            = nullptr;
-		tag::handle<Variable>                    hHttpListenerContext     = {};
+		tag::handle<Variant>                    hHttpListenerContext     = {};
 		tag::config<ssize32_t>                   cMaxRespondSize          = std::numeric_limits<ssize32_t>::max() / 2;
 
 		tag::option<const char *>                opLocalAddress           = nullptr;
