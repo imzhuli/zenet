@@ -72,6 +72,12 @@ namespace ze
 		sxEnvReady = false;
 	}
 
+	ZENetworkManager::ZENetworkManager()
+	{}
+
+	ZENetworkManager::~ZENetworkManager()
+	{}
+
 	ZE_API bool ZENetworkManager::init(const void * pParam)
 	{
 		assert(sxEnvReady);
@@ -131,39 +137,6 @@ namespace ze
 		_xDnsRequestPool.clean();
 		evdns_base_free(steal(_pDnsBase), 0);
 		event_base_free(steal(_pEventBase));
-	}
-
-	// DNS Session:
-	void ZENetworkManager::dns_callback(int  errcode,  struct  evutil_addrinfo *addr, void *usr_ptr)
-	{
-		auto pRequest = static_cast<AsyncContext *>(usr_ptr);
-		if (errcode) {
-			assert(!addr);
-			if (errcode != EVUTIL_EAI_CANCEL) {
-				pRequest->hDnsResultListener->onDnsResult(pRequest->xDomainName, nullptr, evutil_gai_strerror(errcode));
-			}
-		}
-		else {
-			ZEDomainInfo result;
-			auto iterator = addr;
-			size_t count = 0;
-			while(iterator && count < ZE_MAX_RESOLVE_ADDRESS_NUMBER) {
-				if(iterator->ai_family == AF_INET && iterator->ai_addrlen == sizeof(sockaddr_in)) { // only process af_inet address
-					result.xAddresses[count].addr4 = reinterpret_cast<sockaddr_in&>(*iterator->ai_addr);
-					++count;
-				}
-				if (iterator->ai_family == AF_INET6 && iterator->ai_addrlen == sizeof(sockaddr_in6)) { // only process af_inet address
-					result.xAddresses[count].addr6 = reinterpret_cast<sockaddr_in6&>(*iterator->ai_addr);
-					++count;
-				}
-				iterator = iterator->ai_next;
-			}
-			result.xAddressNumber = count;
-			pRequest->hDnsResultListener->onDnsResult(pRequest->xDomainName, &result,  evutil_gai_strerror(errcode));
-			evutil_freeaddrinfo(addr);
-		}
-		auto pool = pRequest->hRecyclePool;
-		pool->destroy(pRequest);
 	}
 
 	ZE_API void ZENetworkManager::addNameServer(const char * ipstr)
@@ -228,6 +201,39 @@ namespace ze
 	ZE_API void ZENetworkManager::deferBreak()
 	{
 		event_base_loopbreak(_pEventBase);
+	}
+
+	// DNS Session:
+	void ZENetworkManager::dns_callback(int  errcode,  struct  evutil_addrinfo *addr, void *usr_ptr)
+	{
+		auto pRequest = static_cast<AsyncContext *>(usr_ptr);
+		if (errcode) {
+			assert(!addr);
+			if (errcode != EVUTIL_EAI_CANCEL) {
+				pRequest->hDnsResultListener->onDnsResult(pRequest->xDomainName, nullptr, evutil_gai_strerror(errcode));
+			}
+		}
+		else {
+			ZEDomainInfo result;
+			auto iterator = addr;
+			size_t count = 0;
+			while(iterator && count < ZE_MAX_RESOLVE_ADDRESS_NUMBER) {
+				if(iterator->ai_family == AF_INET && iterator->ai_addrlen == sizeof(sockaddr_in)) { // only process af_inet address
+					result.xAddresses[count].addr4 = reinterpret_cast<sockaddr_in&>(*iterator->ai_addr);
+					++count;
+				}
+				if (iterator->ai_family == AF_INET6 && iterator->ai_addrlen == sizeof(sockaddr_in6)) { // only process af_inet address
+					result.xAddresses[count].addr6 = reinterpret_cast<sockaddr_in6&>(*iterator->ai_addr);
+					++count;
+				}
+				iterator = iterator->ai_next;
+			}
+			result.xAddressNumber = count;
+			pRequest->hDnsResultListener->onDnsResult(pRequest->xDomainName, &result,  evutil_gai_strerror(errcode));
+			evutil_freeaddrinfo(addr);
+		}
+		auto pool = pRequest->hRecyclePool;
+		pool->destroy(pRequest);
 	}
 
 }

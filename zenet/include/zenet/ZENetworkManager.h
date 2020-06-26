@@ -18,6 +18,8 @@ namespace ze
 			EnvGuard(EnvGuard&&) = delete; // no copy && no move
 		};
 
+		ZE_API ZENetworkManager();
+		ZE_API ~ZENetworkManager();
 		ZE_API bool init(const void * pParam) override;
 		ZE_API void clean() override;
 
