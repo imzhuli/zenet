@@ -23,7 +23,7 @@ namespace ze
 		return sock;
 	}
 
-	ZE_API bool ZEConnectionEventListener::onConnectionInputReady(ZEConnection * pConnection)
+	bool ZEConnectionEventListener::onConnectionInputReady(ZEConnection * pConnection)
 	{
 		ubyte data[1024];
 		while(pConnection->read(data, xref(sizeof data)))
@@ -70,7 +70,7 @@ namespace ze
 		}
 	}
 
-	ZE_API bool ZEConnection::init(const void * pParam)
+	bool ZEConnection::init(const void * pParam)
 	{
 		assert(hConnectionEventListener);
 		assert(hNetworkManager);
@@ -117,7 +117,7 @@ namespace ze
 		return true;
 	}
 
-	ZE_API void ZEConnection::clean()
+	void ZEConnection::clean()
 	{
 		if (isOpen()) {
 			close();
@@ -126,12 +126,12 @@ namespace ze
 	}
 
 	// callbacks:
-	ZE_API bool ZEConnection::write(const void * data, size_t length)
+	bool ZEConnection::write(const void * data, size_t length)
 	{
 		return 0 == bufferevent_write(_pBufferEvent, data, length);
 	}
 
-	ZE_API bool ZEConnection::write(const ArrayView<DataView> & writeList)
+	bool ZEConnection::write(const ArrayView<DataView> & writeList)
 	{
 		static_assert(std::is_standard_layout_v<DataView> && std::is_standard_layout_v<evbuffer_iovec>);
 		static_assert(std::alignment_of_v<DataView> == std::alignment_of_v<evbuffer_iovec>);
@@ -147,12 +147,12 @@ namespace ze
 		return evbuffer_add_iovec(bufferevent_get_output(_pBufferEvent), reinterpret_cast<evbuffer_iovec *>(writeList.begin()), (int)writeList.size());
 	}
 
-	ZE_API bool ZEConnection::read(void * buffer, tag::inout<size_t> length)
+	bool ZEConnection::read(void * buffer, tag::inout<size_t> length)
 	{
 		return (length = bufferevent_read(_pBufferEvent, buffer, length)) > 0;
 	}
 
-	ZE_API void ZEConnection::close()
+	void ZEConnection::close()
 	{
 		assert(isOpen());
 		bufferevent_free(steal(_pBufferEvent));

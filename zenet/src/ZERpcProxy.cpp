@@ -68,7 +68,7 @@ namespace ze
 		return Result::AGAIN;
 	}
 
-	ZE_API bool ZERpcProxy::postRequest(ZEConnection * pConnection, const ZERpc & rpc, const ubyte * dataBody)
+	bool ZERpcProxy::postRequest(ZEConnection * pConnection, const ZERpc & rpc, const ubyte * dataBody)
 	{
 		ubyte xHeader[ZERpc::HEADER_SIZE];
 		rpc.writeHeader(xHeader);
@@ -78,7 +78,7 @@ namespace ze
 		return pConnection->write(writeList);
 	}
 
-	ZE_API bool ZERpcProxy::postRequest(ZEConnection * pConnection, const ZERpc & rpc)
+	bool ZERpcProxy::postRequest(ZEConnection * pConnection, const ZERpc & rpc)
 	{
 		assert(!rpc.bodySize());
 		ubyte xHeader[ZERpc::HEADER_SIZE];

@@ -18,7 +18,7 @@ namespace ze
 		}
 	}
 
-	ZE_API bool ZEConnectionListener::init(const void * pParam)
+	bool ZEConnectionListener::init(const void * pParam)
 	{
 		assert(hNetworkManager);
 		assert(oxBindPort);
@@ -38,7 +38,7 @@ namespace ze
 		return _pConnListener != nullptr;
 	}
 
-	ZE_API void ZEConnectionListener::clean()
+	void ZEConnectionListener::clean()
 	{
 		evconnlistener_free(steal(_pConnListener));
 	}

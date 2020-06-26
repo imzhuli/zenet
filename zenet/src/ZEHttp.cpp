@@ -31,7 +31,7 @@ namespace ze
 		pListener->onHttpRespondData(pClient);
 	}
 
-	ZE_API bool ZEHttpClient::init(const void * pParam)
+	bool ZEHttpClient::init(const void * pParam)
 	{
 		assert(hNetworkManager);
 		assert(hHttpListener);
@@ -91,7 +91,7 @@ namespace ze
 		return false;
 	}
 
-	ZE_API void ZEHttpClient::clean()
+	void ZEHttpClient::clean()
 	{
 		xMime.reset();
 		xRepondBody.reset();

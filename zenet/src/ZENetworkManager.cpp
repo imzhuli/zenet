@@ -33,7 +33,7 @@ namespace ze
 	ZE_UNUSED static void EventLogNone(int severity, const char* msg)
 	{}
 
-	ZE_API ZENetworkManager::EnvGuard::EnvGuard()
+	ZENetworkManager::EnvGuard::EnvGuard()
 	{
 		std::call_once(sxLibventInitFlag, [] {
 
@@ -60,7 +60,7 @@ namespace ze
 		sxEnvReady = true;
 	}
 
-	ZE_API ZENetworkManager::EnvGuard::~EnvGuard()
+	ZENetworkManager::EnvGuard::~EnvGuard()
 	{
 		std::lock_guard envGuard{ sxEnvMutex };
 		if (!sxEnvReady) {
@@ -72,13 +72,7 @@ namespace ze
 		sxEnvReady = false;
 	}
 
-	ZENetworkManager::ZENetworkManager()
-	{}
-
-	ZENetworkManager::~ZENetworkManager()
-	{}
-
-	ZE_API bool ZENetworkManager::init(const void * pParam)
+	bool ZENetworkManager::init(const void * pParam)
 	{
 		assert(sxEnvReady);
 
@@ -123,7 +117,7 @@ namespace ze
 		return true;
 	}
 
-	ZE_API void ZENetworkManager::clean()
+	void ZENetworkManager::clean()
 	{
 		// cancel requests:
 		do {
@@ -139,13 +133,13 @@ namespace ze
 		event_base_free(steal(_pEventBase));
 	}
 
-	ZE_API void ZENetworkManager::addNameServer(const char * ipstr)
+	void ZENetworkManager::addNameServer(const char * ipstr)
 	{
 		assert(_pDnsBase);
 		evdns_base_nameserver_ip_add(_pDnsBase, ipstr);
 	}
 
-	ZE_API ZENetworkManager::AsyncContext * ZENetworkManager::asyncResolve(const char * hostname, ZEDnsResultListener * listener)
+	ZENetworkManager::AsyncContext * ZENetworkManager::asyncResolve(const char * hostname, ZEDnsResultListener * listener)
 	{
 		size_t hostnameLength = strlen(hostname);
 		if (hostnameLength > ZE_MAX_DOMAIN_NAME_LENGTH) {
@@ -170,7 +164,7 @@ namespace ze
 		return nullptr;
 	}
 
-	ZE_API void ZENetworkManager::cancelResolve(AsyncContext * && pContext)
+	void ZENetworkManager::cancelResolve(AsyncContext * && pContext)
 	{
 		assert(pContext);
 		#ifndef NDEBUG
@@ -188,17 +182,17 @@ namespace ze
 		evdns_getaddrinfo_cancel(pContext->hRequest);
 	}
 
-	ZE_API void ZENetworkManager::loopOnce()
+	void ZENetworkManager::loopOnce()
 	{
 		 event_base_loop(_pEventBase, EVLOOP_NONBLOCK);
 	}
 
-	ZE_API void ZENetworkManager::infinateLoop()
+	void ZENetworkManager::infinateLoop()
 	{
 		event_base_loop(_pEventBase, EVLOOP_NO_EXIT_ON_EMPTY);
 	}
 
-	ZE_API void ZENetworkManager::deferBreak()
+	void ZENetworkManager::deferBreak()
 	{
 		event_base_loopbreak(_pEventBase);
 	}
