@@ -1,22 +1,29 @@
 project(test_zenet)
 
+# enable specific macors by system type:
+if (CMAKE_SYSTEM_NAME MATCHES "MSYS")
+	set(libevent_LIBRARIES event_core event_extra event_pthreads)
+elseif (CMAKE_SYSTEM_NAME MATCHES "Windows")
+	find_package(Libevent CONFIG REQUIRED)
+	set(libevent_LIBRARIES event_shared event_core_shared event_extra_shared)
+elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
+	set(libevent_LIBRARIES event_core event_extra event_pthreads)
+elseif (CMAKE_SYSTEM_NAME MATCHES "Darwin")
+	set(libevent_LIBRARIES event_core event_extra event_pthreads)
+endif()
+
 include_directories(
 	./include/
 	../zenet/include/
 	${CMAKE_INSTALL_PREFIX}/include/
+	${LIBEVENT_INCLUDE_DIRS}
 	)
 link_directories(
 	${CMAKE_INSTALL_PREFIX}/lib/
 	)
 
-set(ze_dynamic zecore_shared)
-if (WIN32)
-	set(libevent libevent_core libevent_extras ws2_32)
-else()
-	set(libevent event_core event_extra event_pthreads)
-endif()
-
-set(test_dependency zenet_dynamic ${libevent} ${ze_dynamic} ${cpp})
+message(STATE ${CMAKE_INSTALL_PREFIX}/lib/)
+set(test_dependency zenet_shared zecore_shared ${cpp})
 
 aux_source_directory(./libevent TEST_LIBEVENT_SRC)
 add_executable(test_libevent ${TEST_LIBEVENT_SRC})

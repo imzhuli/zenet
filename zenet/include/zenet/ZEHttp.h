@@ -1,12 +1,7 @@
 #pragma once
+#include "./__ENV__.h"
 #include "./ZEConnection.h"
 #include "./ZENetworkManager.h"
-#include <ze/convention.h>
-#include <limits>
-#include <string>
-#include <string_view>
-#include <event2/http.h>
-#include <event2/http_struct.h>
 
 namespace ze
 {
@@ -16,11 +11,11 @@ namespace ze
 	class ZEHttpClientListener : Interface
 	{
 	public:
-		virtual void onHttpRespondData(ZEHttpClient* pClient) {};
-		virtual void onHttpError(ZEHttpClient* pClient) {};
+		ZE_API virtual ZE_FORCE_INLINE void onHttpRespondData(ZEHttpClient* pClient) {};
+		ZE_API virtual ZE_FORCE_INLINE void onHttpError(ZEHttpClient* pClient) {};
 	protected:
-		ZEHttpClientListener() = default;
-		ZEHttpClientListener(ZEHttpClientListener &&) = delete;
+		ZE_API ZEHttpClientListener() = default;
+		ZE_API ZEHttpClientListener(ZEHttpClientListener &&) = delete;
 	};
 
 	class ZEHttpClient final
@@ -46,7 +41,7 @@ namespace ze
 
 		tag::handle<ZENetworkManager*>           hNetworkManager          = nullptr;
 		tag::handle<ZEHttpClientListener *>      hHttpListener            = nullptr;
-		tag::handle<Variant>                    hHttpListenerContext     = {};
+		tag::handle<Variant>                     hHttpListenerContext     = {};
 		tag::config<ssize32_t>                   cMaxRespondSize          = std::numeric_limits<ssize32_t>::max() / 2;
 
 		tag::option<const char *>                opLocalAddress           = nullptr;
@@ -70,8 +65,8 @@ namespace ze
 		static void httpRequestCallback(struct evhttp_request *req, void *arg);
 
 	public:
-		bool init(const void * pParam) override;
-		void clean() override;
+		ZE_API bool init(const void * pParam) override;
+		ZE_API void clean() override;
 
 		ZE_FORCE_INLINE std::string_view respondMime() const { return xMime.view().sv(); }
 		ZE_FORCE_INLINE DataView respondBody() const { return xRepondBody.view(); }

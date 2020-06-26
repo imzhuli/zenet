@@ -1,11 +1,8 @@
 #pragma once
+#include "./__ENV__.h"
 #include "./ZEDns.h"
-#include <ze/convention.h>
 #include <ze/dlist.h>
 #include <ze/ext/memory_pool.h>
-#include <event2/thread.h>
-#include <event2/event.h>
-#include <event2/dns.h>
 
 namespace ze
 {
@@ -15,14 +12,14 @@ namespace ze
 	{
 	public:
 		struct EnvGuard {
-			EnvGuard();
-			~EnvGuard();
+			ZE_API EnvGuard();
+			ZE_API ~EnvGuard();
 		private:
 			EnvGuard(EnvGuard&&) = delete; // no copy && no move
 		};
 
-		bool init(const void * pParam) override;
-		void clean() override;
+		ZE_API bool init(const void * pParam) override;
+		ZE_API void clean() override;
 
 	public:
 		ze::tag::config<uintptr_t> cMaxDnsRequestCount     = 256;
@@ -47,14 +44,14 @@ namespace ze
 		ZE_FORCE_INLINE event_base * eventBase() const { return _pEventBase; }
 		ZE_FORCE_INLINE evdns_base * dnsBase() const { return _pDnsBase; }
 
-		void loopOnce();
-		void infinateLoop();
-		void deferBreak();
+		ZE_API void loopOnce();
+		ZE_API void infinateLoop();
+		ZE_API void deferBreak();
 
 		// dns request:
-		void addNameServer(const char * ipstr);
-		AsyncContext * asyncResolve(const char * hostname, ZEDnsResultListener * listener);
-		void cancelResolve(AsyncContext * && pContext);
+		ZE_API void addNameServer(const char * ipstr);
+		ZE_API AsyncContext * asyncResolve(const char * hostname, ZEDnsResultListener * listener);
+		ZE_API void cancelResolve(AsyncContext * && pContext);
 
 	private:
 		static void dns_callback(int  errcode,  struct  evutil_addrinfo *addr, void *usr_ptr);

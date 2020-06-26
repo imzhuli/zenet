@@ -5,7 +5,7 @@
 namespace ze
 {
 
-	void ZERpc::writeHeader(ze::ubyte * output) const
+	ZE_API void ZERpc::writeHeader(ze::ubyte * output) const
 	{
 		ze::StreamWriter sw(output);
 		sw.w2(MAGIC);
@@ -17,7 +17,7 @@ namespace ze
 		assert(sw.offset() == HEADER_SIZE);
 	}
 
-	bool ZERpc::readHeader(const ze::ubyte * input)
+	ZE_API bool ZERpc::readHeader(const ze::ubyte * input)
 	{
 		ze::StreamReader sr(input);
 		if(MAGIC != sr.r2()) {

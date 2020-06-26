@@ -1,6 +1,5 @@
 #pragma once
-#include <ze/convention.h>
-#include <event2/event.h>
+#include "./__ENV__.h"
 
 namespace ze
 {
@@ -19,7 +18,7 @@ namespace ze
 
 	struct ZEDnsResultListener : ze::Interface
 	{
-		virtual void onDnsResult(const char * hostname, const ZEDomainInfo * domainInfo, const char * errstr) = 0;
+		ZE_API virtual void onDnsResult(const char * hostname, const ZEDomainInfo * domainInfo, const char * errstr) = 0;
 	};
 
 	// static assertions

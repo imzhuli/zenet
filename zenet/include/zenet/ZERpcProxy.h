@@ -1,7 +1,7 @@
 #pragma once
+#include "./__ENV__.h"
 #include "./ZERpc.h"
 #include "./ZEConnection.h"
-#include <ze/convention.h>
 
 namespace ze
 {
@@ -24,15 +24,16 @@ namespace ze
 	};
 
 	protected:
-		ZERpcProxy() = default;
-		~ZERpcProxy() = default;
+		ZE_API ZERpcProxy() = default;
+		ZE_API ~ZERpcProxy() = default;
 
-		virtual auto onConnected(ZEConnection * pConnection) -> ZERpcContext * { return new ZERpcContext{}; };
-		virtual void onDisconnected(ZEConnection * pConnection, ZERpcContext * && pContext) { delete pContext; };
+		ZE_API virtual ZE_FORCE_INLINE auto onConnected(ZEConnection * pConnection) -> ZERpcContext * { return new ZERpcContext{}; };
+		ZE_API virtual ZE_FORCE_INLINE void onDisconnected(ZEConnection * pConnection, ZERpcContext * && pContext) { delete pContext; };
 
-		virtual bool postRequest(ZEConnection * pConnection, const ZERpc & rpc, const ubyte * dataBody);
-		virtual bool postRequest(ZEConnection * pConnection, const ZERpc & rpc);
-		virtual bool onRequest(ZEConnection * pConnection, const ZERpc & rpc, const ubyte * request) = 0;
+		ZE_API virtual bool postRequest(ZEConnection * pConnection, const ZERpc & rpc, const ubyte * dataBody);
+		ZE_API virtual bool postRequest(ZEConnection * pConnection, const ZERpc & rpc);
+		ZE_API virtual bool onRequest(ZEConnection * pConnection, const ZERpc & rpc, const ubyte * request) = 0;
+
 		ZE_FORCE_INLINE ZERpcContext * getRpcContext(ZEConnection * pConnection) { return static_cast<ZERpcContext *>(pConnection->hConnectionEventListenerContext.ptr); }
 		ZE_FORCE_INLINE void bindConnection(ZEConnection * pConnection, void * pContext = nullptr) {
 			assert(!pConnection->hConnectionEventListener);

@@ -1,6 +1,5 @@
 #pragma once
-#include <ze/convention.h>
-#include <type_traits>
+#include "./__ENV__.h"
 
 namespace ze
 {
@@ -64,8 +63,8 @@ namespace ze
 
 	public:
 		ZE_FORCE_INLINE size_t totalSize() const { return HEADER_SIZE + _xBodySize; }
-		void writeHeader(ubyte * output) const;
-		bool readHeader(const ubyte * input);
+		ZE_API void writeHeader(ubyte * output) const;
+		ZE_API bool readHeader(const ubyte * input);
 
 		ZE_FORCE_INLINE CommandId       commandId() const                     { return makeCommandId(_xMajorCommandId, _xMinorCommandId); }
 		ZE_FORCE_INLINE MajorCommandId  majorId()   const                     { return _xMajorCommandId; }

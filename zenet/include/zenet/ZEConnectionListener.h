@@ -1,10 +1,7 @@
 #pragma once
+#include "./__ENV__.h"
 #include "./ZEConnection.h"
 #include "./ZENetworkManager.h"
-#include <ze/convention.h>
-#include <event2/bufferevent.h>
-#include <event2/listener.h>
-#include <cassert>
 
 namespace ze
 {
@@ -21,8 +18,8 @@ namespace ze
 		struct ::evconnlistener  * _pConnListener = nullptr;
 
 	public:
-		bool init(const void * pParam) override;
-		void clean() override;
+		ZE_API bool init(const void * pParam) override;
+		ZE_API void clean() override;
 
 		/**
 		 * Function: makeConnection
@@ -33,7 +30,7 @@ namespace ze
 		 *   . this function is designed to take the ownership of clientSock,
 		 *   so it's its duty to close socket propperly on any failure
 		 */
-		virtual ZEConnection * makeConnection(evutil_socket_t && clientSock, const sockaddr_in & clientAddress) = 0;
+		ZE_API virtual ZEConnection * makeConnection(evutil_socket_t && clientSock, const sockaddr_in & clientAddress) = 0;
 
 	private:
 		static void acceptEventCallback(struct evconnlistener *, evutil_socket_t clientSock, struct sockaddr * clientAddress, int socklen, void * ctx);
