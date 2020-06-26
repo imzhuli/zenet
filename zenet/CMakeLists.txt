@@ -41,7 +41,7 @@ target_compile_definitions(${libname}_shared PRIVATE -D zecore_EXPORT)
 
 #install
 install(
-	DIRECTORY ${PROJECT_SOURCE_DIR}/./include/zenet
+	DIRECTORY ${PROJECT_SOURCE_DIR}/./include/${libname}
 	DESTINATION include
 	FILES_MATCHING PATTERN "*.h"
 	)
