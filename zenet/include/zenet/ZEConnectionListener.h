@@ -30,7 +30,7 @@ namespace ze
 		 *   . this function is designed to take the ownership of clientSock,
 		 *   so it's its duty to close socket propperly on any failure
 		 */
-		ZE_API virtual ZEConnection * makeConnection(evutil_socket_t && clientSock, const sockaddr_in & clientAddress) = 0;
+		virtual ZEConnection * makeConnection(evutil_socket_t && clientSock, const sockaddr_in & clientAddress) = 0;
 
 	private:
 		static void acceptEventCallback(struct evconnlistener *, evutil_socket_t clientSock, struct sockaddr * clientAddress, int socklen, void * ctx);

@@ -32,7 +32,7 @@ namespace ze
 
 		ZE_API virtual bool postRequest(ZEConnection * pConnection, const ZERpc & rpc, const ubyte * dataBody);
 		ZE_API virtual bool postRequest(ZEConnection * pConnection, const ZERpc & rpc);
-		ZE_API virtual bool onRequest(ZEConnection * pConnection, const ZERpc & rpc, const ubyte * request) = 0;
+		virtual bool onRequest(ZEConnection * pConnection, const ZERpc & rpc, const ubyte * request) = 0;
 
 		ZE_FORCE_INLINE ZERpcContext * getRpcContext(ZEConnection * pConnection) { return static_cast<ZERpcContext *>(pConnection->hConnectionEventListenerContext.ptr); }
 		ZE_FORCE_INLINE void bindConnection(ZEConnection * pConnection, void * pContext = nullptr) {

@@ -18,7 +18,7 @@ namespace ze
 
 	struct ZEDnsResultListener : ze::Interface
 	{
-		ZE_API virtual void onDnsResult(const char * hostname, const ZEDomainInfo * domainInfo, const char * errstr) = 0;
+		virtual void onDnsResult(const char * hostname, const ZEDomainInfo * domainInfo, const char * errstr) = 0;
 	};
 
 	// static assertions
